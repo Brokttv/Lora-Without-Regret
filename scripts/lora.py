@@ -27,7 +27,8 @@ def inject_lora(model, rank, alpha, device):
     for name, module in model.named_modules():
         if isinstance(module, nn.Linear):
             targets.append((name, module))
-    
+            
+    #Applying Lora to all layers
     for name, module in targets:
         lora_layer = LoraLayer(rank, alpha, module)
         lora_layer.to(device)
