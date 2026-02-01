@@ -26,17 +26,6 @@ scikit-learn
 python main.py
 ```
 
-### All available parameters
-```bash
-python main.py \
-  --lrs 1e-4 5e-4 1e-3 \
-  --epochs 5 \
-  --rank 128 \
-  --alpha 256 \
-  --batch_size 32 \
-  --seed 42
-```
-
 ### Full fine-tuning
 ```bash
 python main.py --full-finetune
