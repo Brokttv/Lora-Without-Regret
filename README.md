@@ -21,7 +21,7 @@ The data shows that performance, as measured by validation loss, is influenced b
   <br>
   
 <p align="center">
-  <img src="assets/fig3.jpeg" width="1000"/>
+  <img src="assets/fig3.jpeg" width="1200"/>
 </p>
 
 ### Exceptions and Edge Cases
