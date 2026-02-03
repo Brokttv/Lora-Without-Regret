@@ -66,7 +66,7 @@ The `10×` ratio does not necessarily correlate with superior performance—the 
 
 ### Conclusion
 
-The optimal learning rate for LoRA appears to have three degrees of freedom: rank, `alpha/r` ratio, and training regime as defined by the data and model.
+The optimal learning rate for LoRA appears to depend on three factors: rank, `alpha/r` ratio, and training regime as defined by the data and model.
 
 
 # LoRA Wihtout Regret Fine-tuning
