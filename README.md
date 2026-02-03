@@ -8,7 +8,7 @@ I conducted preliminary experiments to investigate the origin of the `10×` lear
 
 ### Background
 
-It is important to note that the consistent ratio stems from the `1/r` scaling factor, which implicitly scales the learning rate by the layer width determined by rank `r`, ensuring updates remain invariant to width scaling as discovered by Yang et al. in their μP approach ([The Practitioner's Guide to the Maximal Update Parameterization](https://blog.eleuther.ai/mutransfer/)).
+It is important to note that the consistent ratio stems from the `1/r` scaling factor, which implicitly scales the learning rate by the layer width determined by rank `r`, ensuring updates remain invariant to width scaling as discovered by Yang et al. in their [μP approach](https://blog.eleuther.ai/mutransfer/).
 
 ### Key Findings
 
