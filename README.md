@@ -68,7 +68,8 @@ The `10×` ratio does not necessarily correlate with superior performance—the 
 
 The optimal learning rate for LoRA appears to have three degrees of freedom: rank, `alpha/r` ratio, and training regime as defined by the data and model.
 
-# LoRA Fine-tuning
+
+# LoRA Wihtout Regret Fine-tuning
 ---
 ## Setup
 ```bash
