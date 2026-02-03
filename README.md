@@ -38,6 +38,11 @@ For some reason, I discaraded gradient norms and went for the adapters final nor
 </p>
 <br>
 
+This makes sense when considering that `B` is initialized to zero. When `α/r < 1`, the adapter updates are dampened even further, which slows down learning of both `A` and `B`. The model must push updates as aggressively as safely possible to escape initialization—especially critical given only 5 epochs of training.
+
+The opposite holds when `α/r > 1`: updates are amplified, so moderate learning rates suffice to ensure adapeters do not dievrge too far from the base signal.
+
+`B` is initialized to zero deliberately, allowing the frozen base model to provide inductive bias to the low-rank subspace so gradients are directed meaningfully from the start.
 ### Exceptions and Edge Cases
 
 This pattern does not hold universally:
