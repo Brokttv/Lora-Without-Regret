@@ -23,6 +23,20 @@ The data shows that performance, as measured by validation loss, is influenced b
 <p align="center">
   <img src="assets/fig3.jpeg" width="1200"/>
 </p>
+<br>
+
+**Norms Behaviour:**
+
+For some reason, I discaraded gradient norms and went for the adapters final norm which revals the following insight:
+- When the model chooses a learning rate `10x` bigger than FullFT, `A` and `B` generally end up with very high magnitudes compared to FullFT final weights norm `w` with `w = w_final - w_init` at the optimal point
+
+- When the optimal `lr` is only `3.33x` bigger, the adapters' norms saty close from FullFT's
+  
+  <br>
+  <p align="center">
+  <img src="assets/fig4.jpeg" width="600"/>
+</p>
+<br>
 
 ### Exceptions and Edge Cases
 
