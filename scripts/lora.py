@@ -45,7 +45,7 @@ def inject_lora(model, rank, alpha, device):
             setattr(model, child_name, lora_layer)
 
 #Freezing the base matrices weights and keeping lora weights trainable in case use_lora = True else we freeze all models params to pass them to the optimizer
-def FullFT_or_Lora(model, use_lora, rank, alpha, device):
+def setup_model(model, use_lora, rank, alpha, device):
     if use_lora:
         for param in model.parameters():
             param.requires_grad = False
