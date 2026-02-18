@@ -12,80 +12,85 @@ It is important to note that the consistent ratio reported in the blog  stems fr
 
 ### Key Findings
 
-The data shows that performance, as measured by validation loss, is influenced by the `alpha/r` factor, which in turn affects the optimal learning rate ratio.
+The data shows that performance, as measured by either test accuracy or perplexity (depending on the task), is influenced by **adapters initialization**, **`alpha/r`** scale factor and **regime** defined by task nature.
 
-**General Pattern:**
-- When `alpha/r ≤ 1`, the `10×` ratio emerges
-- When `alpha/r > 1`, a `3.33×` ratio appears instead
-  
+**Standart configuration from Lora-Without-Regret blog:**
+- 'A'initalized using uniform distributin and `B`is zero
+- We use a constant `alpha` value of `32` and factor by `1/r`
+- We set a fixed `lr` (no scheduler) used by both adapters
+- We train  `Distil-bert-uncased` on a `10k` subset of AG-News (classifcation)
+
+The results show that the optimal learning rate for all ranks is 10x higher than FullFT with test accuracy peaking at rank 32.
+
+
   <br>
   
 <p align="center">
-  <img src="assets/fig3.jpeg" width="1200"/>
+  <img src="assets/normal-lora-bert" width="750"/>
 </p>
 <br>
 
-**Norm Behaviour:**
+**Different regime:**
 
-For some reason, I discaraded gradient norms and went for the adapters final norm which revals the following insight:
-- When the model chooses a learning rate `10x` bigger than FullFT, `A` and `B` generally end up with very high magnitudes compared to FullFT final weights norm `w` at the optimal point, with `w = w_final - w_init`
+Now, we train `distilgpt2` on the `wikitext` dataset using the same configuration and data amount. We rely on test perplexity (`exp(NLL)`) for benchmarking.
 
-- When the optimal `lr` is only `3.33x` bigger, the adapters' norms stay close from FullFT's
+We observe that performance here peaks at a higher rank `128` compared to previous setup, revealing that the optimal rank for is regime-dependent
+
   
   <br>
   <p align="center">
-  <img src="assets/fig4.jpeg" width="590"/>
+  <img src="assets/gpt3" width="700"/>
 </p>
 <br>
 
-This makes sense when considering that `B` is initialized to zero. When `α/r < 1`, the adapter updates are dampened even further, which slows down learning of both `A` and `B`. The model must push updates as aggressively as safely possible to escape initialization—especially critical given only 5 epochs of training.
+### Tweaking `alpha/r`
 
-The opposite holds when `α/r > 1`: updates are amplified, so moderate learning rates suffice to ensure adapters do not diverge too far from the base signal.
+For the rest of experiments, We use `distilbert` and `ag-news` as they are base-line for all comparasions. 
 
-`B` is initialized to zero deliberately, allowing the frozen base model to provide inductive bias to the low-rank subspace so gradients are directed meaningfully from the start.
-### Exceptions and Edge Cases
+Here, we increase the mutliplier `alpha/r` scaling adapters weights by a factor of 10  by setting `alpha = 10r`. 
 
-This pattern does not hold universally:
+<br>
+  <p align="center">
+  <img src="assets/bigger scale" width="750"/>
+</p>
+<br>
 
-**Rank 32:**
-- The `10×` ratio only appears when `alpha/r = 1`, though results are noisy due to training for only `5` epochs under computational constraints
-- When trained for `10` epochs with rank `32` and alpha `= 16`, the `10×` ratio emerges consistently
-
-**Rank 64:**
-- With `alpha/r = 1`, the `3.33×` ratio holds regardless of training duration (`5` or `10` epochs)
-- Smaller and larger `alpha/r` values yield the expected `10×` and `3.33×` ratios, respectively
-
-**Rank 128:**
-- The ratio remains `10×` regardless of the `alpha/r` value
-- When weight norms are heavily restricted by setting alpha `= 8`, the ratio increases dramatically to `33.3×`
-
-### Caveats
-
-The specific values of `3.33×` and `33.3×` may be artifacts of this experimental setup, as the learning rate sweep was limited and discrete due to computational constraints.
-
-### Summary of Configurations
-
-**Fixed alpha = 32:**
-- All ranks converge to an optimal learning rate `10×` higher than full fine-tuning, except for smaller ranks (`8` and `16`)
+**We observe the following:**
+- The optimal learning rate ratio is rank-dependent as it is `10x` at rank 16, `3x` for both rank 32 and 64, and only `1x` for rank 128
+- Performance peaks at rank 16 as opposed to rank 32 shown previously
+- The highest accuracy recorded is bigger than the one seen in the previous setup which uses `32`/r consistently across all ranks
   
-<p align="center">
-  <img src="assets/fig1.jpeg" width="650"/>
+Although the maximum accuracy belongs to rank 16 which happens to validate the 10x optimal ratio, we speculate that this is an **artifact** of the model and dataset used and **not linked to the ratio itself**. 
+
+With that highlighted, we observe that a `lr` 10x bigger than FullFT's is not always linked to the best performance but rather is a result of particualr norm of the `AB` matrix impacted by **initialization distribution**, **`alpha/r`**, and finally **rank**.
+
+**Important:**
+From playing with `alpha`, it appears that when the the optimal learning rate is consistent across ranks, it is not due to `1/r` as Lora-Without-Regret blog claims but rather `alpha/r` with `alpha` being a constant.
+
+**When we change the `alpha` dynamics, we observe two main trends:**
+- Constant α → optimal LR ≈ invariant w.r.t. rank
+- Constant α/r → optimal LR scales ↓ with rank
+<br>
+
+
+### Initialization
+
+I change the standard initialization from `A` following an uniform distribution and `B` set to zero to both `A` and `B` following a **Gaussian** dsitribution.
+
+As expected, not only the `10x` ratio falls, but training deteriorates drastically with a maximum accuracy capping around ~`25%`.
+
+<br>
+  <p align="center">
+  <img src="assets/distrib-lora-bert" width="800"/>
 </p>
-
-**Fixed alpha = 8:**
-- All ranks optimize at the `10×` ratio
-   
-<p align="center">
-  <img src="assets/fig2.jpeg" width="650"/>
-</p>
-
-### Performance Considerations
-
-The `10×` ratio does not necessarily correlate with superior performance—the `3.33×` ratio occasionally outperforms it, with the relationship appearing to depend on rank.
+<br>
 
 ### Conclusion
+We emperically confirm that the 10x ratio found repeatedly in Thinking Machines blog and elsewhere is controlled  by all **initialization regime** and **`alpha/r`**. We also show that  consitent optimal LR ratio is a result of `alpha` being a constant scaled by `1/r`.
 
-The optimal learning rate for LoRA appears to depend on three factors: rank, `alpha/r` ratio, and training regime as defined by the data and model.
+**To try the experiemnts above, run the commands below**.
+
+
 
 
 # LoRA Wihtout Regret Fine-tuning
