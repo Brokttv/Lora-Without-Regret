@@ -86,7 +86,7 @@ As expected, not only the `10x` ratio falls, but training deteriorates drastical
 <br>
 
 ### Conclusion
-We emperically confirm that the 10x ratio found repeatedly in Thinking Machines blog and elsewhere is controlled  by all **initialization regime** and **`alpha/r`**. We also show that  consitent optimal LR ratio is a result of `alpha` being a constant scaled by `1/r`.
+We emperically confirm that the `10x` ratio found repeatedly in Thinking Machines blog and elsewhere is controlled  by the initialization regime controlled by **`A` and `B` dsitributions**, **`alpha/r`**, and **rank**. We also show that  consistent optimal LR ratio across ranks is a result of `alpha` being a constant scaled by `1/r`.
 
 **To try the experiemnts above, run the commands below**.
 
