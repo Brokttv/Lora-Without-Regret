@@ -15,7 +15,7 @@ It is important to note that the consistent ratio reported in the blog  stems fr
 The data shows that performance, as measured by either test accuracy or perplexity (depending on the task), is influenced by **adapters initialization**, **`alpha/r`** scale factor and **regime** defined by task nature.
 
 **Standart configuration from Lora-Without-Regret blog:**
-- 'A'initalized using uniform distributin and `B`is zero
+- `A` initalized using uniform distributin and `B` is zero
 - We use a constant `alpha` value of `32` and factor by `1/r`
 - We set a fixed `lr` (no scheduler) used by both adapters
 - We train  `Distil-bert-uncased` on a `10k` subset of AG-News (classifcation)
