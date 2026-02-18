@@ -155,3 +155,16 @@ Results saved to `results.json`:
   }
 }
 ```
+
+## 📑 Citation
+
+If you find this work useful, please cite it as:
+
+```bibtex
+@misc{brokttv2025vit,
+  title        = {Lora-Without-Regret: Explaining the ratio between LoRA and FullFT learning rates},
+  author       = {Brokttv},
+  year         = {2025},
+  howpublished = {\url{https://github.com/Brokttv/Lora-Without-Regret}},
+}
+
