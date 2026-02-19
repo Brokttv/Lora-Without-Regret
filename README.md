@@ -14,11 +14,11 @@ It is important to note that the consistent ratio reported in the blog  stems fr
 
 The data shows that performance, as measured by either test accuracy or perplexity (depending on the task), is influenced by **adapters initialization**, **`alpha/r`** scale factor and **regime** defined by task nature.
 
-**Standart configuration from Lora-Without-Regret blog:**
-- `A` initalized using uniform distributin and `B` is zero
+**1) Standard configuration from Lora-Without-Regret blog:**
+- `A` initialized using uniform distribution and `B` is zero
 - We use a constant `alpha` value of `32` and factor by `1/r`
 - We set a fixed `lr` (no scheduler) used by both adapters
-- We train  `Distil-bert-uncased` on a `10k` subset of AG-News (classifcation)
+- We train  `Distilbert-uncased-base` on a `10k` subset of AG-News (classifcation)
 
 The results show that the optimal learning rate for all ranks is 10x higher than FullFT with test accuracy peaking at rank 32.
 
@@ -30,7 +30,7 @@ The results show that the optimal learning rate for all ranks is 10x higher than
 </p>
 <br>
 
-**Different regime:**
+**2) Different regime:**
 
 Now, we train `distilgpt2` on the `wikitext` dataset using the same configuration and data amount. We rely on test perplexity (`exp(NLL)`) for benchmarking.
 
@@ -43,11 +43,11 @@ We observe that performance here peaks at a higher rank `128` compared to previo
 </p>
 <br>
 
-### Tweaking `alpha/r`
+### 3) Tweaking `alpha/r`
 
-For the rest of experiments, We use `distilbert` and `ag-news` as they are base-line for all comparasions. 
+For the rest of experiments, We use `distilbert` and `ag-news` as the base-line for all comparisons. 
 
-Here, we increase the mutliplier `alpha/r` scaling adapters weights by a factor of 10  by setting `alpha = 10r`. 
+Here, we increase the mutliplier `alpha/r` to scale adapters weights by a factor of 10  by setting `alpha = 10r`. 
 
 <br>
   <p align="center">
@@ -58,11 +58,11 @@ Here, we increase the mutliplier `alpha/r` scaling adapters weights by a factor 
 **We observe the following:**
 - The optimal learning rate ratio is rank-dependent as it is `10x` at rank 16, `3x` for both rank 32 and 64, and only `1x` for rank 128
 - Performance peaks at rank 16 as opposed to rank 32 shown previously
-- The highest accuracy recorded is bigger than the one seen in the previous setup which uses `32`/r consistently across all ranks
+- The highest accuracy recorded is bigger than the one seen in the previous setup which uses `32/r` consistently across all ranks
   
-Although the maximum accuracy belongs to rank 16 which happens to validate the 10x optimal ratio, we speculate that this is an **artifact** of the model and dataset used and **not linked to the ratio itself**. 
+Although the maximum accuracy belongs to rank 16 which happens to validate the 10x optimal ratio, we strongly hypothesize that this is an **artifact** of the model and dataset used and **not linked to the ratio itself**. 
 
-With that highlighted, we observe that a `lr` 10x bigger than FullFT's is not always linked to the best performance but rather is a result of particualr norm of the `AB` matrix impacted by **initialization distribution**, **`alpha/r`**, and finally **rank**.
+With that highlighted, we observe that a `lr` 10x bigger than FullFT's is not always linked to the best performance but rather is a result of a particular norm of the `AB` matrix impacted by **initialization distribution**, **`alpha/r`**, and finally **rank**.
 
 **Important:**
 From playing with `alpha`, it appears that when the the optimal learning rate is consistent across ranks, it is not due to `1/r` as Lora-Without-Regret blog claims but rather `alpha/r` with `alpha` being a constant.
@@ -73,11 +73,11 @@ From playing with `alpha`, it appears that when the the optimal learning rate is
 <br>
 
 
-### Initialization
+### 4) Initialization
 
-I change the standard initialization from `A` following an uniform distribution and `B` set to zero to both `A` and `B` following a **Gaussian** dsitribution.
+We change the standard initialization from `A` following an uniform distribution and `B` set to zero to both `A` and `B` following a **Gaussian** distribution.
 
-As expected, not only the `10x` ratio falls, but training deteriorates drastically with a maximum accuracy capping around ~`25%`.
+As expected, not only the `10x` ratio falls, but learning deteriorates drastically with a maximum accuracy capping around ~`25%`.
 
 <br>
   <p align="center">
@@ -86,7 +86,9 @@ As expected, not only the `10x` ratio falls, but training deteriorates drastical
 <br>
 
 ### Conclusion
-We emperically confirm that the `10x` ratio found repeatedly in Thinking Machines blog and elsewhere is a result of the initialization regime controlled by **`A` and `B` dsitributions**, **`alpha/r`**, and **rank**. We also show that  consistent optimal LR ratio across ranks is a result of `alpha` being a constant scaled by `1/r`.
+We emperically confirm that the `10x` ratio found repeatedly in Thinking Machines blog and elsewhere is a result of the initialization regime controlled by **`A` and `B` dsitributions**, **`alpha/r`**, and **rank**. We also show that  consistent optimal LR ratio across ranks is a result of `alpha` being a constant scaled by `1/r` and not 1/r alone.
+
+Lastly, changing regime alone only affects the optimal rank and not the optimal LR ratio as both `distilbert` and `distilgpt2` show a LoRA LR 10x higher than FullFT across all ranks using the same initialization regime.
 
 **To try the experiemnts above, run the commands below**.
 
