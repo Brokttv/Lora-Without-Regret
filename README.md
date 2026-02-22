@@ -34,7 +34,7 @@ The results show that the optimal learning rate for all ranks is 10x higher than
 
 Now, we train `distilgpt2` on the `wikitext` dataset using the same configuration and data amount. We rely on test perplexity (`exp(NLL)`) for benchmarking.
 
-We observe that performance here peaks at a higher rank `128` compared to previous setup, revealing that the optimal rank for is regime-dependent
+We observe that performance here peaks at a higher rank `128` compared to previous setup, revealing that the optimal rank for is regime-dependent for similar configuration.
 
   
   <br>
