@@ -6,7 +6,7 @@ Reproducing Lora Low Regret blog from scratch (no HF) and investigating the LR 1
 
 I conducted preliminary experiments to investigate the origin of the `10×` learning rate ratio observed in LoRA training.
 
-⭐`Please note that the provided insights are unique to my minimal setups and the lack of generalization to scale is due to computational constraints, nonetheless they remain valuable and get us closer from a better understanding of LoRA and FullFT LR dynamics`
+⭐`Please note that the provided insights are unique to my minimal setups and the lack of generalization to scale is due to computational constraints, nonetheless they remain valuable and get us closer from a better understanding of LoRA and FullFT LR dynamics.`
 
 ### Background
 
