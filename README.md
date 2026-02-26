@@ -6,6 +6,8 @@ Reproducing Lora Low Regret blog from scratch (no HF) and investigating the LR 1
 
 I conducted preliminary experiments to investigate the origin of the `10×` learning rate ratio observed in LoRA training.
 
+⭐`Please note that the provided insights are unique to my minimal setups and lack of generalization to scale is due to computational constraints, nonetheless they remain valuable and get us closer for understanding LoRA and FullFT LR dynamics`
+
 ### Background
 
 It is important to note that the consistent ratio reported in the blog  stems from the `1/r` and `alpha` scaling factors. We know that `1/r` implicitly scales the learning rate by the layer width determined by rank `r`, ensuring updates' velocity remain invariant to width scaling as highlighted by Yang et al. in their [μP approach](https://blog.eleuther.ai/mutransfer/).
