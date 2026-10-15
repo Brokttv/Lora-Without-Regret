@@ -1,5 +1,5 @@
 # Lora-Without-Regret
-Reproducing Lora Low Regret blog from scratch (no HF) and investigating the LR 10x ratio.
+Reproducing Lora Low Regret blog by Thinking Machines from scratch (no HF) and investigating the LR 10x ratio.
 
 
 ## Preliminary Investigation: Understanding the 10× Learning Rate Ratio
